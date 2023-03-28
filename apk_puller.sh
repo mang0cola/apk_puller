@@ -3,7 +3,7 @@
 
 apk_pull_all(){
     for package in $(adb shell pm list packages | tr -d '\r' | sed 's/package://g'); do
-        apk=$(adb shell pm path $package | tr -d '\r' | sed 's/package://g');
+        apk=$(adb shell pm path $package | tr -d '\r' | head -n 1 | sed 's/package://g');
         echo "pulling $apk";
         adb pull -p "$apk" $package.apk;
     done    
@@ -11,7 +11,7 @@ apk_pull_all(){
 
 apk_pull(){
     package=$1
-	package_path=$(adb shell pm path "$package" | tr -d '\r' | sed 's/package://g');
+	package_path=$(adb shell pm path "$package" | tr -d '\r' | head -n 1 | sed 's/package://g');
 
     if [ -z "$package_path" ]; then
 		echo "package not found: $package";
